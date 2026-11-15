@@ -226,6 +226,17 @@
   const chat = $('#chat');
   if (chat && !reduce) {
     const msgs = $$('.msg', chat), typing = $('#typing');
+    // lock the chat to its finished height so the phone never grows while messages arrive
+    const lockChat = () => {
+      const playing = chat.classList.contains('is-playing');
+      chat.style.height = '';
+      chat.classList.remove('is-playing');
+      chat.style.height = chat.offsetHeight + 'px';
+      if (playing) chat.classList.add('is-playing');
+    };
+    lockChat();
+    addEventListener('resize', lockChat);
+    if (document.fonts) document.fonts.ready.then(lockChat);
     chat.classList.add('is-playing');
     const chatIO = new IntersectionObserver(([e]) => {
       if (!e.isIntersecting) return;
