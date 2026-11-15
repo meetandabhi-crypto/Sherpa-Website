@@ -214,6 +214,7 @@ section { position: relative; }
 .flagcard blockquote { margin: 0; font-family: var(--serif); font-weight: 500; font-size: 1.3rem; line-height: 1.3; font-variation-settings: "opsz" 30; }
 .flagcard figcaption { display: flex; gap: .9rem; align-items: center; font-size: .85rem; opacity: .85; }
 .avatar { width: 44px; height: 44px; border-radius: 50%; flex: none; border: 1.5px dashed currentColor; background: repeating-linear-gradient(45deg, rgba(127, 127, 127, .15) 0 4px, transparent 4px 8px); }
+.avatar--init { border: 1.5px solid currentColor; background: none; display: grid; place-items: center; font-weight: 700; font-size: .8rem; letter-spacing: .02em; }
 
 /* ---------- story ---------- */
 .story { padding: clamp(80px, 11vw, 150px) 0; background: var(--cream-2); }
@@ -763,3 +764,60 @@ h3 { font-weight: 600; }
 .dossier__photo:has(.dossier__img)::after { background: linear-gradient(180deg, rgba(31, 29, 63, .18) 0%, rgba(31, 29, 63, .28) 55%, rgba(31, 29, 63, .7) 100%); mix-blend-mode: multiply; }
 .dossier__ridge { z-index: 2; }
 .badges { z-index: 3; }
+
+/* compact Sherpa Way section (desktop/tablet; phones keep their own sizes) */
+@media (min-width: 901px) {
+  #way.story { padding: clamp(56px, 6.5vw, 96px) 0; }
+  #way .way__head { margin-bottom: clamp(32px, 4vw, 56px); }
+  #way .way__title { font-size: clamp(2.4rem, 4.8vw, 4.2rem); margin-bottom: .9rem; }
+  #way .way__lede { font-size: clamp(1.15rem, 1.9vw, 1.6rem); max-width: 780px; }
+  #way .principles { padding-top: 104px; }
+  #way .principles__ridge { height: 80px; }
+  #way .principle__n { top: -107px; width: 28px; height: 28px; left: calc(50% - 14px); font-size: .75rem; }
+  #way .principle:nth-of-type(2) .principle__n { top: -113px; }
+  #way .principle:nth-of-type(3) .principle__n { top: -103px; }
+  #way .principle h3 { font-size: 1.3rem; margin-bottom: .55rem; }
+  #way .principle p { font-size: .95rem; line-height: 1.55; }
+}
+
+/* compact Guides and 24/7 support sections (desktop/tablet; phones keep their own sizes) */
+@media (min-width: 901px) {
+  #guides.guides { padding: clamp(90px, 9vw, 120px) 0 clamp(56px, 6vw, 84px); }
+  #guides .section-head { margin-bottom: clamp(28px, 3.4vw, 44px); }
+  #guides .section-head h2 { font-size: clamp(2.2rem, 3.6vw, 3.1rem); }
+  #guides .section-head__sub { font-size: 1rem; margin-top: .8rem; }
+  #guides .dossiers { gap: clamp(16px, 2vw, 26px); max-width: 1080px; }
+  #guides .dossier__photo { aspect-ratio: 16 / 8.5; }
+  #guides .badge { width: 76px; height: 76px; }
+  #guides .badge b { font-size: 1.9rem; }
+  #guides .badge small { font-size: .58rem; max-width: 60px; }
+  #guides .badge-atar { padding: .35rem .85rem; }
+  #guides .badge-atar b { font-size: 1.15rem; }
+  #guides .dossier__body { padding: clamp(1.1rem, 2vw, 1.6rem); }
+  #guides .dossier__role { font-size: .8rem; margin-bottom: .3rem; }
+  #guides .dossier h3 { font-size: clamp(1.5rem, 2.2vw, 1.9rem); margin-bottom: .4rem; }
+  #guides .dossier__teaches { font-size: 1rem; margin-bottom: 1rem; }
+  #guides .tiles { margin-bottom: 1.1rem; gap: .55rem; }
+  #guides .tile { padding: .75rem .8rem .7rem; border-radius: 13px; }
+  #guides .tile b { font-size: clamp(1.9rem, 3vw, 2.4rem); }
+  #guides .tile--atar b { font-size: clamp(1.5rem, 2.4vw, 1.9rem); }
+  #guides .tile span { font-size: .8rem; }
+  #guides .dossier__facts { margin-bottom: 1rem; gap: .45rem; }
+  #guides .dossier__facts div { font-size: .88rem; padding-bottom: .45rem; }
+  #guides .dossier__quote { font-size: .95rem; }
+
+  #support.support { padding-top: clamp(28px, 3vw, 44px); padding-bottom: clamp(56px, 6vw, 84px); }
+  #support .support__wrap { padding-top: clamp(40px, 4.5vw, 64px); gap: clamp(32px, 4.5vw, 70px); }
+  #support h2 { font-size: clamp(2.1rem, 3.4vw, 2.9rem); margin-bottom: .9rem; }
+  #support .support__lede { font-size: 1rem; margin-bottom: 1.6rem; }
+  #support .perks { gap: 1rem; }
+  #support .perks h3, #support .perks li:first-child h3 { font-size: 1.08rem; }
+  #support .perks p { font-size: .86rem; }
+  #support .phone { width: min(290px, 100%); border-radius: 38px; padding: 11px; }
+  #support .phone__top { border-radius: 28px 28px 0 0; padding: 40px 14px 11px; }
+  #support .chat { border-radius: 0 0 28px 28px; min-height: 0; padding: 11px 11px 16px; }
+  #support .msg { font-size: .78rem; padding: .5rem .75rem; line-height: 1.35; }
+}
+
+/* chat height is locked by script.js; keep content pinned to the top */
+.chat { box-sizing: border-box; overflow: hidden; justify-content: flex-start; }

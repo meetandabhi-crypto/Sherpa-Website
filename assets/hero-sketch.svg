@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="150 70 580 560" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <radialGradient id="glow" cx="0.78" cy="0.22" r="0.75">
+      <stop offset="0" stop-color="#4A4F8F" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#1E1E3F" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22224A"/>
+      <stop offset="1" stop-color="#161633"/>
+    </linearGradient>
+    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <clipPath id="shade">
+      <polygon points="640,120 672,172 696,158 730,210 790,300 840,400 720,430 654,330 658,200"/>
+    </clipPath>
+  </defs>
+
+  <rect x="150" y="70" width="580" height="560" fill="url(#bg)"/>
+  <rect x="150" y="70" width="580" height="560" fill="url(#glow)"/>
+
+  <g filter="url(#rough)" fill="none" stroke="#F4F1EA" stroke-linecap="round" stroke-linejoin="round">
+    <!-- sun, drawn twice -->
+    <circle cx="640" cy="150" r="92" stroke-width="1.6" opacity=".22"/>
+    <circle cx="642" cy="148" r="96" stroke-width="1.2" opacity=".14"/>
+
+    <!-- far ridge -->
+    <path d="M150 560 L215 510 L262 530 L330 470 L372 492" stroke-width="1.8" opacity=".3"/>
+    <path d="M730 330 L770 360 L820 330" stroke-width="1.8" opacity=".3"/>
+
+    <!-- shading hatch on the right face -->
+    <g clip-path="url(#shade)" stroke="#C9D3A4" stroke-width="1.5" opacity=".55">
+      <path d="M200 100 L530 430 M210 100 L540 430 M220 100 L550 430 M230 100 L560 430 M240 100 L570 430 M250 100 L580 430 M260 100 L590 430 M270 100 L600 430 M280 100 L610 430 M290 100 L620 430 M300 100 L630 430 M310 100 L640 430 M320 100 L650 430 M330 100 L660 430 M340 100 L670 430 M350 100 L680 430 M360 100 L690 430 M370 100 L700 430 M380 100 L710 430 M390 100 L720 430 M400 100 L730 430 M410 100 L740 430 M420 100 L750 430 M430 100 L760 430 M440 100 L770 430 M450 100 L780 430 M460 100 L790 430 M470 100 L800 430 M480 100 L810 430 M490 100 L820 430 M500 100 L830 430 M510 100 L840 430 M520 100 L850 430 M530 100 L860 430 M540 100 L870 430 M550 100 L880 430 M560 100 L890 430 M570 100 L900 430 M580 100 L910 430 M590 100 L920 430 M600 100 L930 430 M610 100 L940 430 M620 100 L950 430 M630 100 L960 430 M640 100 L970 430 M650 100 L980 430 M660 100 L990 430 M670 100 L1000 430 M680 100 L1010 430 M690 100 L1020 430 M700 100 L1030 430 M710 100 L1040 430 M720 100 L1050 430 M730 100 L1060 430 M740 100 L1070 430 M750 100 L1080 430 M760 100 L1090 430 M770 100 L1100 430 M780 100 L1110 430 M790 100 L1120 430 M800 100 L1130 430 M810 100 L1140 430 M820 100 L1150 430 M830 100 L1160 430 M840 100 L1170 430 M850 100 L1180 430 M860 100 L1190 430 M870 100 L1200 430 M880 100 L1210 430 M890 100 L1220 430 M900 100 L1230 430 M910 100 L1240 430 M920 100 L1250 430 M930 100 L1260 430 M940 100 L1270 430 M950 100 L1280 430 M960 100 L1290 430 M970 100 L1300 430"/>
+    </g>
+
+    <!-- main mountain, outlined twice for a pencil feel -->
+    <path d="M170 640 L240 580 L300 500 L380 440 L430 390 L470 340 L520 282 L565 225 L610 168 L640 120 L672 172 L696 158 L730 210 L790 300 L850 400 L900 520" stroke-width="3.4"/>
+    <path d="M172 644 L243 583 L303 504 L383 443 L433 394 L473 344 L523 286 L568 229 L612 172 L641 125 L674 176 L697 162 L732 214 L792 304" stroke-width="1.4" opacity=".45"/>
+    <!-- ridge line (arete) and snow line -->
+    <path d="M640 120 L656 200 L650 280 L664 340" stroke-width="2" opacity=".7"/>
+    <path d="M616 160 L626 169 L634 156 L644 171 L652 157 L664 164" stroke-width="2.2"/>
+    <!-- cracks and rock marks -->
+    <path d="M560 300 l14 10 l-6 14 M590 270 l12 -8 M600 330 l16 6 M545 350 l10 14 M620 250 l-8 12" stroke-width="1.6" opacity=".5"/>
+    <path d="M330 520 l14 -10 M390 470 l12 -8 M262 560 l16 -8" stroke-width="1.6" opacity=".45"/>
+    <!-- ground hatch -->
+    <path d="M190 636 l18 -12 M230 628 l18 -12 M270 620 l18 -12 M310 612 l18 -12" stroke-width="1.4" opacity=".35"/>
+
+    <!-- summit flag -->
+    <path d="M640 120 L640 90" stroke-width="2.6"/>
+    <path d="M640 90 L664 98 L640 107 Z" stroke-width="2" fill="#C9D3A4" fill-opacity=".85"/>
+
+    <!-- ledges -->
+    <path d="M518 246 L549 246" stroke-width="3.4"/>
+    <path d="M478 300 L506 300" stroke-width="3.4"/>
+
+    <!-- rope between the two -->
+    <path d="M535 218 Q 520 252 493 274" stroke="#C9D3A4" stroke-width="1.8" stroke-dasharray="2 4"/>
+
+    <!-- GUIDE (above, reaching down) -->
+    <g stroke-width="5">
+      <path d="M535 192 L535 218"/>
+      <path d="M535 218 L527 232 L526 246"/>
+      <path d="M535 218 L543 232 L544 246"/>
+      <path d="M535 196 L522 208 L509 225"/>
+      <path d="M535 196 L547 208 L541 218"/>
+    </g>
+    <circle cx="535" cy="182" r="8.5" stroke-width="3" fill="#1E1E3F"/>
+    <path d="M541 193 L550 195 L551 213 L541 214" stroke-width="3" fill="#1E1E3F"/>
+
+    <!-- CLIMBER (below, being helped up) -->
+    <g stroke-width="5">
+      <path d="M495 248 L491 274"/>
+      <path d="M491 274 L485 288 L485 300"/>
+      <path d="M491 274 L498 286 L500 300"/>
+      <path d="M495 252 L502 238 L509 225"/>
+      <path d="M495 252 L484 264 L478 276"/>
+    </g>
+    <circle cx="494" cy="237" r="8.5" stroke-width="3" fill="#1E1E3F"/>
+    <path d="M487 247 L479 248 L478 270 L488 272" stroke-width="3" fill="#1E1E3F"/>
+
+    <!-- joined hands -->
+    <circle cx="509" cy="225" r="4.2" fill="#F4F1EA" stroke-width="1"/>
+  </g>
+</svg>
