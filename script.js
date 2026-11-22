@@ -207,14 +207,20 @@
   $('#vPrev').addEventListener('click', () => { stepBy(-1); restartAuto(); });
   $('#vNext').addEventListener('click', () => { stepBy(1); restartAuto(); });
   let down = false, sx = 0, sl = 0;
-  rail.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; down = true; sx = e.clientX; sl = rail.scrollLeft; rail.classList.add('is-drag'); });
+  rail.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse' || e.target.closest('.vid')) return; down = true; sx = e.clientX; sl = rail.scrollLeft; rail.classList.add('is-drag'); });
   addEventListener('pointerup', () => { down = false; rail.classList.remove('is-drag'); });
   rail.addEventListener('pointermove', e => { if (down) rail.scrollLeft = sl - (e.clientX - sx); });
+  // a drag that ends on a screenshot card shouldn't open it; only a real click does
+  let dragged = 0;
+  rail.addEventListener('pointerdown', e => { dragged = 0; sx = e.clientX; });
+  rail.addEventListener('pointermove', e => { if (down) dragged = Math.max(dragged, Math.abs(e.clientX - sx)); });
+  rail.addEventListener('click', e => { if (dragged > 6 && e.target.closest('a')) { e.preventDefault(); e.stopPropagation(); } }, true);
 
   // autoplay: move to the next card every few seconds; pause while someone is reading or interacting
-  const AUTO_MS = 4000;
+  const AUTO_MS = 2200;
   let autoTimer = null, paused = false, onScreen = false;
-  const tick = () => { if (!paused && onScreen && !document.hidden) stepBy(1); };
+  const vidPlaying = () => $$('video', rail).some(v => !v.paused);   // never slide away from a video someone is watching
+  const tick = () => { if (!paused && onScreen && !document.hidden && !vidPlaying()) stepBy(1); };
   function restartAuto() { clearInterval(autoTimer); if (!reduce) autoTimer = setInterval(tick, AUTO_MS); }
   ['mouseenter', 'focusin', 'touchstart'].forEach(ev => rail.addEventListener(ev, () => { paused = true; }, { passive: true }));
   ['mouseleave', 'focusout'].forEach(ev => rail.addEventListener(ev, () => { paused = false; restartAuto(); }));
@@ -293,20 +299,67 @@
     new IntersectionObserver(([e]) => { running = e.isIntersecting; if (running) draw(); }).observe(cv);
   }
 
-  /* ---------- enquiry form (placeholder: not connected yet) ----------
-     To go live, point this at Formspree, Netlify Forms, or your own endpoint, e.g.
-     fetch('https://formspree.io/f/XXXX', { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
-  */
+  /* ---------- enquiry form: sent to Formspree in the background ----------
+     The endpoint is the form's action attribute (https://formspree.io/f/mnpdzoqz).
+     Formspree emails each enquiry on, with the family's email as the reply-to address. */
   const form = $('#enquiryForm'), note = $('#formNote');
-  form.addEventListener('submit', e => {
+  const sendBtn = $('button[type=submit]', form), sendLabel = sendBtn.innerHTML;
+  const say = (msg, bad = false) => { note.textContent = msg; note.classList.toggle('is-bad', bad); };
+  form.addEventListener('submit', async e => {
     e.preventDefault();
     let ok = true;
     $$('[required]', form).forEach(i => {
-      const bad = !i.value.trim() || (i.type === 'email' && !/^\S+@\S+\.\S+$/.test(i.value));
+      const bad = !i.value.trim() || (i.type === 'email' && !/^\S+@\S+\.\S+$/.test(i.value.trim()));
       i.classList.toggle('is-error', bad); if (bad) ok = false;
     });
-    if (!ok) { note.textContent = 'Please add a name and a valid email so we can reach you.'; return; }
-    note.textContent = '▲ Thanks! You\'re roped in. We\'ll be in touch shortly. (Demo form: nothing was sent.)';
-    form.reset();
+    if (!ok) { say('Please add a name and a valid email so we can reach you.', true); return; }
+
+    // send the ticked subjects as one readable list, e.g. "English, General Maths"
+    const data = new FormData(form);
+    const subjects = data.getAll('subjects');
+    data.delete('subjects');
+    data.append('subjects', subjects.length ? subjects.join(', ') : 'Not sure yet');
+
+    sendBtn.disabled = true; sendBtn.textContent = 'Sending…'; say('');
+    showStatus('loading');
+    const minWait = new Promise(r => setTimeout(r, reduce ? 300 : 1600));   // let the climb play, even on fast connections
+    try {
+      const [res] = await Promise.all([fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } }), minWait]);
+      if (res.ok) {
+        showStatus('done');
+        form.reset();
+      } else {
+        const body = await res.json().catch(() => ({}));
+        const why = (body.errors || []).map(x => x.message).join(' ');
+        hideStatus();
+        say((why ? why + ' ' : 'Sorry, that didn\'t send. ') + 'Please try again, or message us on Instagram @sherpa_ed.', true);
+      }
+    } catch (err) {
+      await minWait; hideStatus();
+      say('Sorry, that didn\'t send. Check your connection and try again, or message us on Instagram @sherpa_ed.', true);
+    } finally {
+      sendBtn.disabled = false; sendBtn.innerHTML = sendLabel;
+    }
   });
+
+  // sending / sent overlay
+  const status = $('#formStatus'), stTitle = $('#formStatusTitle'), stText = $('#formStatusText');
+  function showStatus(state) {
+    status.hidden = false;
+    status.classList.remove('is-loading', 'is-done');
+    void status.offsetWidth;                         // restart the animations each time
+    status.classList.add('is-on', state === 'done' ? 'is-done' : 'is-loading');
+    if (state === 'done') {
+      stTitle.textContent = 'Details received';
+      stText.textContent = 'Thanks for filling in your details. We\'ll be in touch shortly to book your free trial.';
+    } else {
+      stTitle.textContent = 'Sending your details';
+      stText.textContent = 'Hang tight, this only takes a moment.';
+    }
+  }
+  function hideStatus() {
+    status.classList.remove('is-on');
+    setTimeout(() => { status.hidden = true; status.classList.remove('is-loading', 'is-done'); }, 350);
+  }
+  $('#formAgain').addEventListener('click', () => { hideStatus(); say(''); form.querySelector('input[name=student]').focus(); });
 })();
